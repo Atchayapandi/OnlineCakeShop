@@ -1,6 +1,7 @@
 package com.cakeshop.test;
 
 import java.sql.SQLException;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.cakeshop.dao.ProductDao;
 import com.cakeshop.dao.UserDao;
 import com.cakeshop.model.Cart;
 import com.cakeshop.model.Invoice;
+import com.cakeshop.model.Payment;
 import com.cakeshop.model.Products;
 import com.cakeshop.model.User;
 import java.util.Date;
@@ -96,9 +98,8 @@ public class TestMain {
 				}
 			} while (flag == 0);
 
-			
 			User user = new User(userName, EmailId, password, address);
-			
+
 			userDao.insertUser(user);
 //login details
 		case 2:
@@ -130,11 +131,15 @@ public class TestMain {
 				}
 			} while (flag == 0);
 
-			User currentUser = UserDao.validateUser(Email_id, password);
+			User currentUser = UserDao.validateUser(EmailId, password);
 //Admin login
 			if (currentUser == null) {
-				User adminuser = AdminDao.validateAdmin(Email_id, password);
-				System.out.println("Welcome!!\t" + adminuser.getUserName() + "\tas Admin");
+				User adminuser = AdminDao.validateAdmin(EmailId, password);
+				
+				System.out.println("Welcome!!\t" + adminuser.getUserName() + "\tas Admin");			
+				
+					
+				
 				System.out.println("\n1.List Users \n3.update product\n4.delete Product");
 				System.out.println("Enter Your choice");
 				choice = Integer.parseInt(scan.nextLine());
@@ -167,7 +172,7 @@ public class TestMain {
 			} else {
 				System.out.println("welcome !!\t" + currentUser.getUserName());
 
-				System.out.println("\n1.show products\n2.show invoice");
+				System.out.println("\n1.show products");
 				choice = Integer.parseInt(scan.nextLine());
 
 //show products
@@ -181,22 +186,22 @@ public class TestMain {
 						System.out.println(productsList.get(i));
 
 					}
- 
+
 					System.out.println("\nplease enter your choice for order:");
 					System.out.println("\n1.Orders from you\n2.View Order Items\n3.update Order\n4.Cancel order");
 
 					int orderChoice = Integer.parseInt(scan.nextLine());
-                    CartDao cartDao=null;
-				Products product = null;
-				String userFlag = null;				
+					CartDao cartDao = null;
+					Products product = null;
+					String userFlag = null;
 
 					switch (orderChoice) {
 
 					// insert cart
 					case 1:
-						String userName1=currentUser.getUserName();
-						int id1=userDao.findUserId(userName1);
-					
+						String userName1 = currentUser.getUserName();
+						int id1 = userDao.findUserId(userName1);
+
 						System.out.println("view hole product list\n");
 						List<Products> productsList1 = (List<Products>) proDao.showProduct();
 						for (int i = 0; i < productsList1.size(); i++) {
@@ -204,76 +209,94 @@ public class TestMain {
 
 						}
 						System.out.println("\nEnter Product name: ");
-						String productName=scan.nextLine();
-						int id2=ProductDao.findProductId1(productName);
-					
-						int price=proDao.findPrice(id2);				
-						
+						String productName = scan.nextLine();
+						int id2 = ProductDao.findProductId1(productName);
+
+						int price = proDao.findPrice(id2);
+
 						System.out.println("\nEnter your Number of Products");
-						int quantity=Integer.parseInt(scan.nextLine());
-						
-						
+						int quantity = Integer.parseInt(scan.nextLine());
+
 						System.out.println("\nEnter your Order date: ");
-						SimpleDateFormat sdf= new SimpleDateFormat("DD-MM-YYYY");
-						Date orderDate=null;
+						SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
+						Date orderDate = null;
 						try {
 							orderDate = sdf.parse(scan.nextLine());
 						} catch (ParseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						
-						double totalPrice=(double)(quantity*price);
-						System.out.println("\nyour total amount is: "+totalPrice);
-					     Cart cart1=new Cart(id2,id1,quantity,totalPrice,orderDate);
-					     cartDao=new CartDao();
-						cartDao.insertCart(cart1);						
+
+						double totalPrice = (double) (quantity * price);
+						System.out.println("\nyour total amount is: " + totalPrice);
+						Cart cart1 = new Cart(id2, id1, quantity, totalPrice, orderDate);
+						cartDao = new CartDao();
+						cartDao.insertCart(cart1);
 						System.out.println("Thank you !!");
-						
+
 						System.out.println("\nYour Payment Page is open!!");
-						PaymentDao paymentDao=new PaymentDao();
-						
-						
+
+						PaymentDao paymentDao = new PaymentDao();
+						long cardNo1 = 0;
+						int cardCvv1 = 0;
+						Date expireDate1 = null;
+						int paidAmount = 0;
+
 						do {
 							System.out.println("Please enter your card Number");
-							String cardNo =scan.nextLine();
-							Long cardNo1=Long.parseLong(cardNo);
-								
-								
-								if (cardNo.matches("[0-9]{16}+")) {
-									flag = 1;
-									break;
-								} else {
-									flag = 0;
-									System.err.println("Please Enter the valid card number! ");
-								}
-							} while (flag == 0);
+							String cardNo = scan.nextLine();
 							
-							
+
+							if (cardNo.matches("[0-9]{16}+")) {
+								flag = 1;
+								break;
+							} else {
+								flag = 0;
+								System.err.println("Please Enter the valid card number! ");
+							}
+							cardNo1 = Long.parseLong(cardNo);
+						} while (flag == 0);
+
+						do {
+							System.out.println("Please enter your card CVV number");
+							String cardCvv = scan.nextLine();
+							cardCvv1 = Integer.parseInt(cardCvv);
+
+							if (cardCvv.matches("[0-9]{3}+")) {
+								flag = 1;
+								break;
+							} else {
+								flag = 0;
+								System.err.println("Please Enter the valid card CVV number! ");
+							}
+						} while (flag == 0);
+
+						do {
+							System.out.println("Please enter your expire date of card");
+							SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+
+							try {
+								expireDate1 = sdf.parse(scan.nextLine());
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						} while (flag == 0);
+
+						System.out.println("please enter your paid amount");
+						paidAmount = scan.nextInt();
+						if (paidAmount == totalPrice) {
+							System.out.println("your payment is succesfully completed\n your order confirmed");
+						} else {
+							System.out.println("your payment amount is invalid for your purchase");
 						}
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
+
+						Payment payment = new Payment(cardNo1, cardCvv1, expireDate1, paidAmount);
 						break;
 //view cart items
 					case 2:
+
 						System.out.println("view Orders in cart");
 						List<Cart> userCartList = order.viewCart(currentUser);
 						System.out.println(userCartList);
@@ -282,11 +305,11 @@ public class TestMain {
 
 					case 3:
 						System.out.println("This is your cart Items: ");
-				        List<Cart> userCartList1 = order.viewCart(currentUser);
+						List<Cart> userCartList1 = order.viewCart(currentUser);
 						System.out.println(userCartList1);
 						System.out.println("enter your new quantity and your cart id using comma:");
 						String updateCart = scan.nextLine();
-						CartDao.updateCart(updateCart);						
+						CartDao.updateCart(updateCart);
 						break;
 //delete cart				
 
@@ -297,15 +320,9 @@ public class TestMain {
 					}
 					while (choice < 5)
 						break;
-// invoice					
-					
-				case 2:
-					System.out.println("\n1.insert invoice\n2.View invoice");
 
-					
-					}
 				}
 			}
 		}
-	
-
+	}
+}

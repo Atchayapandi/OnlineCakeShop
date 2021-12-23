@@ -31,7 +31,7 @@ public class CartDao {
 			pst.setDouble(4, cart.getTotalPrice());
 			pst.setDate(5, new java.sql.Date(cart.getOrderDate().getTime()));
 			pst.executeUpdate();
-			System.out.println("Your Order Confirmed!!");
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -132,6 +132,7 @@ public class CartDao {
 
 	}
 
+	
 
 	
 	

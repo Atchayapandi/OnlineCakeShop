@@ -126,4 +126,25 @@ public class ProductDao {
 		
 	}
 	
+	public List<Products> findCategory(String categoryName) {
+		List<Products> categoryList = new ArrayList<Products>();
+ 
+		String category=null;
+		String showQuery = "select * from product_details where category_name='"+categoryName+"'";
+		Connection con = ConnectionUtil.getDbConnection();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(showQuery);
+			if(rs.next()) {
+				 category = rs.getString(2);
+				//categoryList.add(category);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return categoryList;
+	}
 }

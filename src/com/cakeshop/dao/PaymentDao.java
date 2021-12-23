@@ -19,7 +19,7 @@ public class PaymentDao {
 
 		try {
 			pst = con.prepareStatement(insertQuery);
-			pst.setInt(1, payment.getCardNo());
+			pst.setLong(1, payment.getCardNo());
 			pst.setInt(2, payment.getCardCvv());
 			pst.setDate(3, new java.sql.Date(payment.getExpireDate().getTime()));
 			pst.setInt(4, payment.getPaidAmount());

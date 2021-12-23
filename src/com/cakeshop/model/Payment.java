@@ -4,14 +4,15 @@ import java.util.Date;
 
 public class Payment {
 
-	private int cardNo;
+	private long cardNo;
 	private int cardCvv;
 	private Date expireDate;
 	private int paidAmount;
-	public int getCardNo() {
+	
+	public long getCardNo() {
 		return cardNo;
 	}
-	public void setCardNo(int cardNo) {
+	public void setCardNo(long cardNo) {
 		this.cardNo = cardNo;
 	}
 	public int getCardCvv() {
@@ -36,7 +37,7 @@ public class Payment {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Payment(int cardNo, int cardCvv, Date expireDate, int paidAmount) {
+	public Payment(long cardNo, int cardCvv, Date expireDate, int paidAmount) {
 		super();
 		this.cardNo = cardNo;
 		this.cardCvv = cardCvv;
