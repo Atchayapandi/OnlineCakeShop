@@ -53,7 +53,7 @@ public class Admin {
 	}
 	@Override
 	public String toString() {
-		return "Admin [name=" + name + ", emailId=" + emailId + ", password=" + password + "]";
+		return "Admin name=" + name + ", \nemailId=" + emailId + ", \npassword=" + password ;
 	}
 	
 }

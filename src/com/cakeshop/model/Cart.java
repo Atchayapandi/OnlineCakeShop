@@ -1,5 +1,6 @@
 package com.cakeshop.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Cart {
@@ -8,7 +9,14 @@ public class Cart {
 	private int userId;
 	private int quantity;
 	private double totalPrice;
+	private Date orderDate;
 	
+	public Date getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
 	public int getProductId() {
 		return productId;
 	}
@@ -27,21 +35,24 @@ public class Cart {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	@Override
-	public String toString() {
-		return "Cart [productId=" + productId + ", userId=" + userId + ", quantity=" + quantity + ", totalPrice="
-				+ totalPrice + "]";
-	}
-	public Cart() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public Cart(int productId, int userId, int quantity, double totalPrice) {
+	
+	
+	public Cart(int productId, int userId, int quantity, double totalPrice, Date orderDate) {
 		super();
 		this.productId = productId;
 		this.userId = userId;
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
+		this.orderDate = orderDate;
+	}
+	public Cart() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public String toString() {
+		return "Cart [productId=" + productId + ", userId=" + userId + ", quantity=" + quantity + ", totalPrice="
+				+ totalPrice + ", orderDate=" + orderDate + "]";
 	}
 	public double getTotalPrice() {
 		return totalPrice;

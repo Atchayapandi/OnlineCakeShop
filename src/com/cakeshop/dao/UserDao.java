@@ -89,9 +89,9 @@ public class UserDao {
 //update user
 	public void update(String update) throws ClassNotFoundException, SQLException {
 		String updateQuery = "update user_details set password=?  where Email_id=?";
-		// get connection
+		
 		Connection con = ConnectionUtil.getDbConnection();
-		// System.out.println("Connection successfully");
+		
 
 		PreparedStatement pstmt = con.prepareStatement(updateQuery);
 		pstmt.setString(1, update.split(",")[0]);
@@ -104,11 +104,11 @@ public class UserDao {
 
 //delete method
 
-	public void deletedetails(String delete) throws ClassNotFoundException, SQLException {
+	public void deletedetails(String delete) throws SQLException {
 		String deleteQuery = "delete from user_details where Email_id=?";
 
 		Connection con = ConnectionUtil.getDbConnection();
-		// System.out.println("Connection successfully");
+		
 		PreparedStatement pstmt = con.prepareStatement(deleteQuery);
 		pstmt.setString(1, delete);
 		int i = pstmt.executeUpdate();
@@ -128,7 +128,7 @@ public class UserDao {
 		int userId = 0;
 		try {
 			stmt = con.createStatement();
-//			
+			
 			ResultSet rs = stmt.executeQuery(findUserID);
 
 			if (rs.next()) {

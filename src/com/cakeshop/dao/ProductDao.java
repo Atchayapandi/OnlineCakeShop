@@ -98,35 +98,7 @@ public class ProductDao {
 		
 	}
 	
-//find product	
-	
-//	public static Products findProduct(int productId)
-//	{
-//		String query="select * from product_details where cake_id=?";
-//		
-//		Connection con=ConnectionUtil.getDbConnection();
-//		Products products=null;
-//		try {
-//			PreparedStatement pre=con.prepareStatement(query);
-//			pre.setInt(1, productId);
-//			
-//			ResultSet rs=pre.executeQuery(query);
-//			
-//			if(rs.next())
-//			{
-//				products=new Products(rs.getString(2), rs.getString(3),Integer.parseInt(rs.getString(4)), rs.getString(5));
-//			}
-//			
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		
-//		
-//		return products;
-//		
-//	}
+
 	public  int findPrice(int proID)
 	{
 		String query="select cake_price from product_details where cake_id='"+proID+"'";

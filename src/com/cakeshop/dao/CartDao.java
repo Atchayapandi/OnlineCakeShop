@@ -17,7 +17,7 @@ public class CartDao {
 	public void insertCart(Cart cart) {
 		
 
-		String insert = "INSERT INTO CART_ITEMS (CAKE_ID,USER_ID,ORDER_QUANTITY,TOTAL_PRICE) VALUES(?,?,?,?) ";
+		String insert = "INSERT INTO CART_ITEMS (CAKE_ID,USER_ID,ORDER_QUANTITY,TOTAL_PRICE,order_date) VALUES(?,?,?,?,?) ";
 
 		ConnectionUtil conUtil = new ConnectionUtil();
 		Connection con = conUtil.getDbConnection();
@@ -29,8 +29,9 @@ public class CartDao {
 			pst.setInt(2, cart.getUserId());
 			pst.setInt(3, cart.getQuantity());
 			pst.setDouble(4, cart.getTotalPrice());
+			pst.setDate(5, new java.sql.Date(cart.getOrderDate().getTime()));
 			pst.executeUpdate();
-			System.out.println("Value inserted Successfully");
+			System.out.println("Your Order Confirmed!!");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,7 +56,7 @@ public class CartDao {
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {				
 				
-			    userCartList.add(new Cart(rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getDouble(5)));
+			    userCartList.add(new Cart(rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getDouble(5), rs.getDate(6)));
 		   
 			}
 			
@@ -67,9 +68,10 @@ public class CartDao {
 	}
 
 	// update cart
-	public static void updateCart(String updateCart) throws ClassNotFoundException, SQLException {
+	public static void updateCart(String updateCart) {
 		String updateQuery = "update cart_items set quantity =? where cart_id=?";
-
+      
+		try {
 		Connection con = ConnectionUtil.getDbConnection();
 		PreparedStatement pstmt = con.prepareStatement(updateQuery);
 		pstmt.setInt(1, Integer.parseInt(updateCart.split(",")[0]));
@@ -78,13 +80,18 @@ public class CartDao {
 		System.out.println(i + "row updated");
 		pstmt.close();
 		con.close();
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// delete cart
 
-	public static void deleteCart(String delete) throws ClassNotFoundException, SQLException {
+	public static void deleteCart(String delete)  {
 		String deleteQuery = "delete from cart_items where cart_id=?";
 
+		try {
 		Connection con = ConnectionUtil.getDbConnection();
 		PreparedStatement pstmt = con.prepareStatement(deleteQuery);
 		pstmt.setInt(1, Integer.parseInt(delete));
@@ -92,12 +99,18 @@ public class CartDao {
 		System.out.println(i + "row deleted");
 		pstmt.close();
 		con.close();
+		}
+		catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
 	}
 
 // find cart id		
 
-	public static int findCartId(Cart cart) {
-		String query = "select cart_id from product_details where cake_id=?";
+	public static int findCartId(int cart) {
+		String query = "select cart_id from product_details where user_id=?";
 
 		Connection con = ConnectionUtil.getDbConnection();
 		int cartId = 0;
@@ -119,56 +132,14 @@ public class CartDao {
 
 	}
 
-//find cart details		
 
-	public static Cart findCart(int cartId) {
-		String query = "select * from cart_items where cart_id=?";
+	
+	
+	
+	
+	
+	
 
-		Connection con = ConnectionUtil.getDbConnection();
-		Cart cart = null;
-		try {
-			PreparedStatement pre = con.prepareStatement(query);
-			pre.setInt(1, cartId);
 
-			ResultSet rs = pre.executeQuery(query);
-
-			if (rs.next()) {
-				// cart=new Cart(rs.getString(2), rs.getString(3),
-				// Double.parseDouble(rs.getString(4)), rs.getString(5));
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return cart;
-
-	}
-
-//	public List<Cart> viewUserCart(String Product) {
-//		List<Cart> productsList = new ArrayList<Cart>();
-//
-//		String query = "select * from cart_items";
-//		
-//		int userId = UserDao.findUserId(Product);
-//		List<Cart> userCartList = new ArrayList<Cart>();
-//
-//		Connection con = ConnectionUtil.getDbConnection();
-//		try {
-//			Statement stmt = con.createStatement();
-//			ResultSet rs = stmt.executeQuery(query);
-//			while (rs.next()) {
-//				Cart cart = new Cart(Product,);
-//				
-//				
-//				Cart cart1=userCartList.add(new Products(rs.getString(2),rs.getString(3),rs.getDouble(4),rs.getString(5)));
-//				
-//				
-//			}			
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//		}
-//		return productsList;
 
 }

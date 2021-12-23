@@ -35,8 +35,8 @@ public class Products {
 	}
 	@Override
 	public String toString() {
-		return "Products [cakeName=" + cakeName + ", cakeDescription=" + cakeDescription + ", cakePrice=" + cakePrice
-				+ ", categoryName=" + categoryName + "]";
+		return "Products cakeName=" + cakeName + ", cakeDescription=" + cakeDescription + ", cakePrice=" + cakePrice
+				+ ", categoryName=" + categoryName ;
 	}
 	public Products() {
 		super();
