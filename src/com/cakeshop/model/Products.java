@@ -35,8 +35,8 @@ public class Products {
 	}
 	@Override
 	public String toString() {
-		return "Products cakeName=" + cakeName + ", cakeDescription=" + cakeDescription + ", cakePrice=" + cakePrice
-				+ ", categoryName=" + categoryName ;
+		return "Products \ncakeName=" + cakeName + ",\ncakeDescription=" + cakeDescription + ", \ncakePrice=" + cakePrice
+				+ ", \ncategoryName=" + categoryName+"\n" ;
 	}
 	public Products() {
 		super();

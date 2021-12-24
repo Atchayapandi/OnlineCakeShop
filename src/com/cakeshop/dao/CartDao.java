@@ -69,7 +69,7 @@ public class CartDao {
 
 	// update cart
 	public static void updateCart(String updateCart) {
-		String updateQuery = "update cart_items set quantity =? where cart_id=?";
+		String updateQuery = "update cart_items set order_quantity =? where cart_id=?";
       
 		try {
 		Connection con = ConnectionUtil.getDbConnection();

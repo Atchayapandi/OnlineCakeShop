@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cakeshop.model.Products;
+import com.cakeshop.model.User;
 
 public class ProductDao {
 
@@ -39,6 +40,33 @@ public class ProductDao {
 		return productsList;
 	}
 
+//add new product
+	
+	public void insertProduct(Products product) {
+		String insertQuery = "insert into user_details(cake_name,cake_description,cake_price,category_name) values(?,?,?,?)";
+
+		ConnectionUtil conUtil = new ConnectionUtil();
+		Connection con = conUtil.getDbConnection();
+		PreparedStatement pst = null;
+
+		try {
+			pst = con.prepareStatement(insertQuery);
+			pst.setString(1, product.getCakeName());
+			pst.setString(2, product.getCakeDescription());
+			pst.setInt(3, product.getCakePrice());
+			pst.setString(4, product.getCategoryName());
+			pst.executeUpdate();
+			System.out.println("Value inserted Successfully");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.err.println("Value not inserted in the table");
+		}
+
+	}
+	
+	
+	
 //update product
 	public static void updateProduct(String updateProduct) throws ClassNotFoundException, SQLException {
 		String updateQuery = "update product_details set cake_name =?  where cake_id=?";
@@ -129,15 +157,15 @@ public class ProductDao {
 	public List<Products> findCategory(String categoryName) {
 		List<Products> categoryList = new ArrayList<Products>();
  
-		String category=null;
+		Products category=null;
 		String showQuery = "select * from product_details where category_name='"+categoryName+"'";
 		Connection con = ConnectionUtil.getDbConnection();
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(showQuery);
-			if(rs.next()) {
-				 category = rs.getString(2);
-				//categoryList.add(category);
+			while(rs.next()) {
+				 category = new Products(rs.getString(2),rs.getString(3),rs.getInt(4),categoryName);
+				categoryList.add(category);
 			}
 
 		} catch (SQLException e) {

@@ -131,8 +131,7 @@ public class UserDao {
 			
 			ResultSet rs = stmt.executeQuery(findUserID);
 
-			if (rs.next()) {
-				System.out.println(rs.getInt(1));
+			if (rs.next()) {				
 				userId = rs.getInt(1);
 			}
 		

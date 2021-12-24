@@ -51,8 +51,8 @@ public class Cart {
 	}
 	@Override
 	public String toString() {
-		return "Cart [productId=" + productId + ", userId=" + userId + ", quantity=" + quantity + ", totalPrice="
-				+ totalPrice + ", orderDate=" + orderDate + "]";
+		return "Cart [productId=" + productId + ",\nuserId=" + userId + ",\nquantity=" + quantity + ", \ntotalPrice="
+				+ totalPrice + "\norderDate=" + orderDate + "]";
 	}
 	public double getTotalPrice() {
 		return totalPrice;

@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Scanner;
 import com.cakeshop.dao.AdminDao;
 import com.cakeshop.dao.CartDao;
-import com.cakeshop.dao.InvoiceDao;
 import com.cakeshop.dao.PaymentDao;
 import com.cakeshop.dao.ProductDao;
 import com.cakeshop.dao.UserDao;
 import com.cakeshop.model.Cart;
-import com.cakeshop.model.Invoice;
 import com.cakeshop.model.Payment;
 import com.cakeshop.model.Products;
 import com.cakeshop.model.User;
@@ -66,7 +64,7 @@ public class TestMain {
 			do {
 				System.out.println("Enter password:");
 				password = scan.nextLine();
-				if (password.matches("[A-Za-z]{8,15}")) {
+				if (password.matches("[A-Za-z0-9]{8,15}")) {
 					flag = 1;
 				} else {
 					flag = 0;
@@ -137,10 +135,9 @@ public class TestMain {
 				User adminuser = AdminDao.validateAdmin(EmailId, password);
 				
 				System.out.println("Welcome!!\t" + adminuser.getUserName() + "\tas Admin");			
-				
 					
 				
-				System.out.println("\n1.List Users \n3.update product\n4.delete Product");
+				System.out.println("\n1.List Users \n2.Add products \n3.update product\n4.delete Product");
 				System.out.println("Enter Your choice");
 				choice = Integer.parseInt(scan.nextLine());
 
@@ -153,13 +150,30 @@ public class TestMain {
 					for (int i = 0; i < userList.size(); i++) {
 						System.out.println("\n" + userList.get(i));
 					}
+					//break;
+//add a new product
+				case 2:
+					ProductDao productDao=new ProductDao();
+					System.out.println("Enter your product name:");
+					String proName=scan.nextLine();
+					System.out.println("Enter Your product description: ");
+					String description=scan.nextLine();
+					System.out.println("Enter your product price:");
+				    int price=scan.nextInt();
+				    System.out.println("Enter your category name: ");
+				    String category=scan.nextLine();
+				    
+				    Products product = new Products(proName,description,price,category);
 
+					productDao.insertProduct(product);
+					
+//update product					
 				case 3:
 
 					System.out.println("enter your new cake name and your cake id using comma:");
 					String updateProduct = scan.nextLine();
 					ProductDao.updateProduct(updateProduct);
-					break;
+					//break;
 // delete Product
 				case 4:
 
@@ -197,7 +211,7 @@ public class TestMain {
 
 					switch (orderChoice) {
 
-					// insert cart
+// insert cart
 					case 1:
 						String userName1 = currentUser.getUserName();
 						int id1 = userDao.findUserId(userName1);
@@ -229,11 +243,13 @@ public class TestMain {
 
 						double totalPrice = (double) (quantity * price);
 						System.out.println("\nyour total amount is: " + totalPrice);
+						
 						Cart cart1 = new Cart(id2, id1, quantity, totalPrice, orderDate);
+						
 						cartDao = new CartDao();
 						cartDao.insertCart(cart1);
 						System.out.println("Thank you !!");
-
+//payment method 
 						System.out.println("\nYour Payment Page is open!!");
 
 						PaymentDao paymentDao = new PaymentDao();
@@ -241,22 +257,25 @@ public class TestMain {
 						int cardCvv1 = 0;
 						Date expireDate1 = null;
 						int paidAmount = 0;
-
+//card num validation
+						String cardNo=null;
 						do {
 							System.out.println("Please enter your card Number");
-							String cardNo = scan.nextLine();
+							 cardNo = scan.nextLine();
 							
 
-							if (cardNo.matches("[0-9]{16}+")) {
+							if (cardNo.matches("[0-9]{16}")) {
 								flag = 1;
 								break;
 							} else {
 								flag = 0;
 								System.err.println("Please Enter the valid card number! ");
 							}
-							cardNo1 = Long.parseLong(cardNo);
+							
+							
 						} while (flag == 0);
-
+						cardNo1 = Long.parseLong(cardNo);
+// cvv  number validation
 						do {
 							System.out.println("Please enter your card CVV number");
 							String cardCvv = scan.nextLine();
@@ -270,13 +289,13 @@ public class TestMain {
 								System.err.println("Please Enter the valid card CVV number! ");
 							}
 						} while (flag == 0);
-
+//expire date validation
 						do {
 							System.out.println("Please enter your expire date of card");
 							SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 
 							try {
-								expireDate1 = sdf.parse(scan.nextLine());
+								expireDate1 = sdf1.parse(scan.nextLine());
 							} catch (ParseException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -292,7 +311,11 @@ public class TestMain {
 							System.out.println("your payment amount is invalid for your purchase");
 						}
 
+						PaymentDao paymentdao=new PaymentDao();
 						Payment payment = new Payment(cardNo1, cardCvv1, expireDate1, paidAmount);
+						
+						paymentDao.insertPayment(payment);
+						
 						break;
 //view cart items
 					case 2:
@@ -305,8 +328,8 @@ public class TestMain {
 
 					case 3:
 						System.out.println("This is your cart Items: ");
-						List<Cart> userCartList1 = order.viewCart(currentUser);
-						System.out.println(userCartList1);
+//						List<Cart> userCartList1 = order.viewCart(currentUser);
+//						System.out.println(userCartList1);
 						System.out.println("enter your new quantity and your cart id using comma:");
 						String updateCart = scan.nextLine();
 						CartDao.updateCart(updateCart);
