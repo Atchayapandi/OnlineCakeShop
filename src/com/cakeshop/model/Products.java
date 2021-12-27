@@ -35,9 +35,13 @@ public class Products {
 	}
 	@Override
 	public String toString() {
-		return "Products \ncakeName=" + cakeName + ",\ncakeDescription=" + cakeDescription + ", \ncakePrice=" + cakePrice
-				+ ", \ncategoryName=" + categoryName+"\n" ;
+		return String.format("%-25s%-90s%-10s%-10s",cakeName,cakeDescription,cakePrice,categoryName) ;
 	}
+	
+	
+	
+	
+	
 	public Products() {
 		super();
 		// TODO Auto-generated constructor stub

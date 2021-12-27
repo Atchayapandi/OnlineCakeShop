@@ -119,7 +119,7 @@ public class UserDao {
 
 //find user id method
 
-	public int findUserId(String userName) {
+	public static int findUserId(String userName) {
 		
 		String findUserID = "select user_id from user_details where user_name='"+userName+"'";
 		Connection con = ConnectionUtil.getDbConnection();
@@ -143,5 +143,48 @@ public class UserDao {
 		return userId;
 
 	}
+	
+	
+	//get wallet balance:
+		public static ResultSet walletbal(int id) throws Exception 
+		{
+			Connection con = ConnectionUtil.getDbConnection();
+			System.out.println(id);
+			String query = "select user_wallet from user_details where user_id = ?";
+			PreparedStatement statement = con.prepareStatement(query);
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+//			while(rs.next()) {
+//					System.out.println(rs.getInt(1)); 
+//			}
+			return rs;
+		}
+
+	//update wallet balance:
+		public int updatewallet(int amount,int userid)throws Exception {
+			System.out.println("atchaya");
+			Connection con = ConnectionUtil.getDbConnection();
+			String query = "update user_details set user_wallet = ? where user_id = ?";
+			PreparedStatement statement = con.prepareStatement(query);
+			statement.setInt(1,amount);
+			statement.setInt(2, userid);
+			//statement.executeUpdate("commit");
+			int res = statement.executeUpdate();
+			
+//			if(res.next()) {
+//				System.out.println(res.getString(1));
+//			}
+			 
+			 System.out.println(amount+userid);
+//			 int res1=0;
+			return res;	
+
+		}
+		
+		
+	
+		
+	
+	
 
 }

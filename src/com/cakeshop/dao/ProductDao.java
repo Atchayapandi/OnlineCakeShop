@@ -27,8 +27,7 @@ public class ProductDao {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(showQuery);
 			while (rs.next()) {
-				Products product = new Products(rs.getString(2), rs.getString(3),Integer.parseInt(rs.getString(4)),
-						rs.getString(5));
+				Products product = new Products(rs.getString(2), rs.getString(3),Integer.parseInt(rs.getString(4)),	rs.getString(5));
 				productsList.add(product);
 			}
 
@@ -68,9 +67,10 @@ public class ProductDao {
 	
 	
 //update product
-	public static void updateProduct(String updateProduct) throws ClassNotFoundException, SQLException {
+	public static void updateProduct(String updateProduct) {
 		String updateQuery = "update product_details set cake_name =?  where cake_id=?";
 
+		try {
 		Connection con = ConnectionUtil.getDbConnection();
 		PreparedStatement pstmt = con.prepareStatement(updateQuery);
 		pstmt.setString(1, updateProduct.split(",")[0]);
@@ -79,7 +79,36 @@ public class ProductDao {
 		System.out.println(i + "row updated");
 		pstmt.close();
 		con.close();
+		}catch(SQLException e) {
+			System.out.println("incorrect");
+			e.printStackTrace();
+		}
+		
 	}
+	
+//rating insert 
+	public static void insertRating(int insertRating) {
+		
+		String updateQuery="update product_details set Ratings=? where cake_name=?";
+		
+		Connection con=ConnectionUtil.getDbConnection();
+		try {
+			PreparedStatement pstmt=con.prepareStatement(updateQuery);
+//			pstmt.setInt(1, Integer.parseInt(insertRating.split(",")[1]));
+//			pstmt.setString(2, Products.getCakeName());
+			pstmt.executeUpdate();
+			System.out.println("Rating  added thank you!!");
+			pstmt.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			
+		
+	}	
 
 //delete method
 	
@@ -95,6 +124,8 @@ public class ProductDao {
 		pstmt.close();
 		con.close();
 	}
+	
+	
 	
 //find product id	
 	
@@ -142,6 +173,7 @@ public class ProductDao {
 			if(rs.next())
 			{
 				price=rs.getInt(1);
+				System.out.println(price);
 			}
 			
 			

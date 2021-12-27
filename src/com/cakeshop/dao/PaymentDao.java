@@ -11,7 +11,7 @@ import com.cakeshop.model.User;
 public class PaymentDao {
 	
 	public void insertPayment(Payment payment) {
-		String insertQuery = "insert into payment_details(card_no,card_cvv,expire_date,paid_amount) values(?,?,?,?)";
+		String insertQuery = "insert into payment_details(card_no,expire_date,paid_amount) values(?,?,?)";
 
 		ConnectionUtil conUtil = new ConnectionUtil();
 		Connection con = conUtil.getDbConnection();
@@ -20,9 +20,9 @@ public class PaymentDao {
 		try {
 			pst = con.prepareStatement(insertQuery);
 			pst.setLong(1, payment.getCardNo());			
-			pst.setInt(2, payment.getCardCvv());
-			pst.setDate(3, new java.sql.Date(payment.getExpireDate().getTime()));
-			pst.setInt(4, payment.getPaidAmount());
+			
+			pst.setDate(2, new java.sql.Date(payment.getExpireDate().getTime()));
+			pst.setInt(3, payment.getPaidAmount());
 			pst.executeUpdate();
 			//System.out.println("your card details are saved successfully!!");
 		} catch (SQLException e) {

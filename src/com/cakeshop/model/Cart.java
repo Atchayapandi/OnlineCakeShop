@@ -35,6 +35,12 @@ public class Cart {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	public double getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 	
 	
 	public Cart(int productId, int userId, int quantity, double totalPrice, Date orderDate) {
@@ -49,20 +55,14 @@ public class Cart {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	
+	
 	@Override
 	public String toString() {
-		return "Cart [productId=" + productId + ",\nuserId=" + userId + ",\nquantity=" + quantity + ", \ntotalPrice="
-				+ totalPrice + "\norderDate=" + orderDate + "]";
+		return  String.format("%-10s%-10s%-10s%-10s",productId,userId,quantity,totalPrice,orderDate+"\n");
 	}
-	public double getTotalPrice() {
-		return totalPrice;
-	}
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
-	
-	
-	
 
 	
 }

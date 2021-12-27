@@ -24,6 +24,7 @@ public class CartDao {
 		PreparedStatement pst = null;
 
 		try {
+			System.out.println(cart.getProductId()+cart.getUserId()+cart.getQuantity()+cart.getTotalPrice());
 			pst = con.prepareStatement(insert);
 			pst.setInt(1, cart.getProductId());
 			pst.setInt(2, cart.getUserId());
@@ -42,13 +43,13 @@ public class CartDao {
 
 //view cart items
 
-	public List<Cart> viewCart(User currentUser) {
+	public static List<Cart> viewCart(User currentUser) {
 		
 		
 		List<Cart> userCartList = new ArrayList<Cart>();
 		String query = "select * from cart_items";
 		Connection con = ConnectionUtil.getDbConnection();	
-		ProductDao productDao = new ProductDao();		
+		//ProductDao productDao = new ProductDao();		
 		
 		
 		try {
@@ -56,8 +57,8 @@ public class CartDao {
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {				
 				
-			    userCartList.add(new Cart(rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getDouble(5), rs.getDate(6)));
-		   
+			    Cart cart=new Cart(rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getDouble(5),rs.getDate(6));
+			    userCartList.add(cart);
 			}
 			
 			
@@ -131,6 +132,85 @@ public class CartDao {
 		return cartId;
 
 	}
+	
+	//get wallet balance:
+		public static int walletbal(int id) throws Exception 
+		{
+			Connection con = ConnectionUtil.getDbConnection();
+			String query = "select user_wallet from user_details where user_id = ?";
+			PreparedStatement statement = con.prepareStatement(query);
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+					return rs.getInt(1);
+			}
+			return -1;
+		}
+
+	//update wallet balance:
+		public int updatewallet(int amount,int userid)throws Exception {
+			Connection con = ConnectionUtil.getDbConnection();
+			String query = "update user_details set user_wallet = ? where user_id = ?";
+			PreparedStatement statement = con.prepareStatement(query);
+			statement.setInt(1,amount);
+			statement.setInt(2, userid);
+			int res = statement.executeUpdate();
+			 statement.executeUpdate("commit");
+			return res;	
+
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	public List<Cart> viewUserCart(String currentUser) {
+//		String query = "select * from cart_cafe where user_id=?";
+//		int userId;
+//		try {
+//			userId = UserDao.findUserId(currentUser);
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		List<Cart> userCartList = new ArrayList<Cart>();
+//		ProductDao productDao = new ProductDao();
+//		Connection con = ConnectionUtil.getDbConnection();
+//		try {
+//			PreparedStatement stmt = con.prepareStatement(query);
+//			stmt.setLong(1, userId);
+//			// System.out.println(userId+" UserID");
+//			ResultSet rs = stmt.executeQuery();
+//			while (rs.next()) {
+////				System.out.println("product id " + rs.getInt(2));
+////				System.out.println("product name:" + rs.getString(3));
+//				Products product = productDao.findProductId1(rs.getInt(2));
+//
+//				Cart cart = new Cart();
+//				userCartList.add(cart);
+//			}
+//			// TODO Auto-generated method stub
+//			// return userCartList;
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		return userCartList;
+
+//	}
 
 	
 
@@ -139,8 +219,8 @@ public class CartDao {
 	
 	
 	
-	
+			}
 
 
 
-}
+
